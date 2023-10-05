@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 // core Flutter primitives
@@ -23,6 +24,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification: ${message.notification?.title}');
     print('Message notification: ${message.notification?.body}');
   }
+}
+
+Future saveToken(String token) async {
+  FirebaseFirestore.instance
+      .collection('registrationToken')
+      .doc('UK0tCtpUyGnXW2mtAY9i')
+      .update({
+    'tokens': FieldValue.arrayUnion([token])
+  });
 }
 
 Future<void> main() async {
@@ -53,6 +63,7 @@ Future<void> main() async {
     token = await messaging.getToken(
       vapidKey: vapidKey,
     );
+    await saveToken(token!);
   } else {
     token = await messaging.getToken();
   }
