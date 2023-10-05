@@ -27,11 +27,19 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> saveToken(String token) async {
+  // await FirebaseFirestore.instance
+  //     .collection('registrationToken')
+  //     .doc('UK0tCtpUyGnXW2mtAY9i')
+  //     .update({
+  //   'tokens': FieldValue.arrayUnion([token])
+  // });
+  await Firebase.initializeApp();
+
   await FirebaseFirestore.instance
       .collection('registrationToken')
       .doc('UK0tCtpUyGnXW2mtAY9i')
-      .update({
-    'tokens': FieldValue.arrayUnion([token])
+      .set({
+    'tokens': [token]
   });
 }
 
