@@ -26,8 +26,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future saveToken(String token) async {
-  FirebaseFirestore.instance
+Future<void> saveToken(String token) async {
+  await FirebaseFirestore.instance
       .collection('registrationToken')
       .doc('UK0tCtpUyGnXW2mtAY9i')
       .update({
