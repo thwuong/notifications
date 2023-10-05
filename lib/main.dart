@@ -55,12 +55,7 @@ Future<void> main() async {
     token = await messaging.getToken(
       vapidKey: vapidKey,
     );
-    await db
-        .collection('registrationToken')
-        .doc('UK0tCtpUyGnXW2mtAY9i')
-        .update({
-      'tokens': FieldValue.arrayUnion([token])
-    });
+    await db.collection('registrationToken').add({'token': token});
   } else {
     token = await messaging.getToken();
   }
