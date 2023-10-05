@@ -26,23 +26,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-Future<void> saveToken(String token) async {
-  // await FirebaseFirestore.instance
-  //     .collection('registrationToken')
-  //     .doc('UK0tCtpUyGnXW2mtAY9i')
-  //     .update({
-  //   'tokens': FieldValue.arrayUnion([token])
-  // });
-  await Firebase.initializeApp();
-
-  await FirebaseFirestore.instance
-      .collection('registrationToken')
-      .doc('UK0tCtpUyGnXW2mtAY9i')
-      .set({
-    'tokens': [token]
-  });
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -50,6 +33,7 @@ Future<void> main() async {
   );
 
   //
+  final db = FirebaseFirestore.instance;
   final messaging = FirebaseMessaging.instance;
 
   final settings = await messaging.requestPermission(
@@ -71,7 +55,12 @@ Future<void> main() async {
     token = await messaging.getToken(
       vapidKey: vapidKey,
     );
-    await saveToken(token!);
+    await db
+        .collection('registrationToken')
+        .doc('UK0tCtpUyGnXW2mtAY9i')
+        .update({
+      'tokens': FieldValue.arrayUnion([token])
+    });
   } else {
     token = await messaging.getToken();
   }
